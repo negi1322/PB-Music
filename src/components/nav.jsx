@@ -19,10 +19,10 @@ const Nav = ({ onSearchKeyDown, playlist, profiletoogle }) => {
                 home
               </li>
               <li
-                onClick={() => navigate("/explore")}
+                onClick={() => navigate("/favourite")}
                 className="text-white text-capitalize fs-5 pointer"
               >
-                Explore
+                Favourite
               </li>
               <li
                 onClick={() => navigate("/playlist")}

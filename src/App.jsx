@@ -3,6 +3,7 @@ import { Suspense, lazy } from "react";
 import { ProtectedRoute } from "./utils/auth";
 import Search from "./pages/Search";
 import { MusicProvider } from "./utils/ContextData";
+import Favourite from "./pages/Favourite";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./validators/login"));
@@ -40,6 +41,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Playlist />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/favourite"
+              element={
+                <ProtectedRoute>
+                  <Favourite />
                 </ProtectedRoute>
               }
             />

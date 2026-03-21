@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import Nav from "../components/nav";
 import Music from "../components/Common/Music";
 import { formatTime } from "../components/Common/Input";
-import { get_trending } from "../api/UserAction";
+import {
+  add_user_favourite,
+  get_trending,
+  get_user_favourite,
+} from "../api/UserAction";
 import Profile from "../components/Common/ProfileCard";
 import Loader from "../components/Common/Loader";
 import { AnimatePresence, motion } from "framer-motion";
@@ -22,9 +26,10 @@ function Home() {
   const [showLoader, setshowLoader] = useState(true);
   const [showMusic, setShowMusic] = useState(false);
   const [showSmallMusic, setShowSmallMusic] = useState(false);
+  const [favourite, setFavourite] = useState([]);
 
   const navigate = useNavigate();
-  console.log("imageDatabase", imageData);
+  const userData = JSON.parse(localStorage.getItem("user"));
   const categories = [
     "all",
     "podcasts",
@@ -44,6 +49,15 @@ function Home() {
     getTranding();
   }, [activeType]);
 
+  useEffect(() => {
+    getFavourite();
+  }, []);
+
+  const getFavourite = async () => {
+    const data = await get_user_favourite(userData?.email);
+    const videoIds = data?.data?.videoIds;
+    setFavourite(videoIds);
+  };
   const getTranding = async () => {
     try {
       setshowLoader(true);
@@ -188,10 +202,12 @@ function Home() {
                 {songs.map((song, key) => (
                   <div
                     key={key}
-                    onClick={() => playSong(song)}
-                    className="col-12 d-flex justify-content-between  pointer play-song"
+                    className="col-12 d-flex justify-content-between   play-song"
                   >
-                    <div className="d-flex gap-md-4 gap-3">
+                    <div
+                      onClick={() => playSong(song)}
+                      className="d-flex gap-md-4 gap-3 pointer"
+                    >
                       <div className="home-song-list-album">
                         <img
                           src={song?.thumbnails?.[0]?.url}
@@ -210,9 +226,28 @@ function Home() {
                         </p>
                       </div>
                     </div>
-
-                    <div className="text-secondary fs-6 fw-medium">
-                      {formatTime(song?.duration)}
+                    <div className="d-flex align-content-center gap-4">
+                      <div className="text-secondary fs-6 fw-medium">
+                        {formatTime(song?.duration)}
+                      </div>
+                      <span
+                        onClick={async () => {
+                          await add_user_favourite({
+                            email: userData?.email,
+                            videoId: song?.videoId,
+                          });
+                          await get_user_favourite();
+                        }}
+                        className="pointer"
+                      >
+                        <i
+                          className={
+                            favourite?.includes(song?.videoId)
+                              ? "bi bi-heart-fill text-danger fs-5 fw-medium"
+                              : "bi bi-heart text-white fs-5 fw-medium"
+                          }
+                        ></i>
+                      </span>
                     </div>
                   </div>
                 ))}
