@@ -109,7 +109,6 @@ export const get_user_favourite = async () => {
     });
     return { success: true, data: response?.data?.data };
   } catch (err) {
-    toast.error(err?.response?.data?.message || "Something went wrong");
     return { success: false };
   }
 };
