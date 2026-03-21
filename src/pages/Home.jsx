@@ -7,6 +7,7 @@ import {
   add_user_favourite,
   get_trending,
   get_user_favourite,
+  remove_user_favourite,
 } from "../api/UserAction";
 import Profile from "../components/Common/ProfileCard";
 import Loader from "../components/Common/Loader";
@@ -110,6 +111,21 @@ function Home() {
     setShowMusic(true);
   };
 
+  const handleFavorites = async (song) => {
+    if (favourite?.includes(song?.videoId)) {
+      await remove_user_favourite({
+        email: userData?.email,
+        videoId: song?.videoId,
+      });
+    } else {
+      await add_user_favourite({
+        email: userData?.email,
+        videoId: song?.videoId,
+      });
+    }
+    const updatedFav = await get_user_favourite();
+    setFavourite(updatedFav?.data?.videoIds);
+  };
   return (
     <>
       <AnimatePresence>
@@ -231,13 +247,7 @@ function Home() {
                         {formatTime(song?.duration)}
                       </div>
                       <span
-                        onClick={async () => {
-                          await add_user_favourite({
-                            email: userData?.email,
-                            videoId: song?.videoId,
-                          });
-                          await get_user_favourite();
-                        }}
+                        onClick={() => handleFavorites(song)}
                         className="pointer"
                       >
                         <i

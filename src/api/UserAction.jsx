@@ -85,7 +85,16 @@ export const update_user_detail = async (payload) => {
 export const add_user_favourite = async (payload) => {
   try {
     const response = await axios.post(`${API}/addFav`, payload);
-    toast.success(response?.data?.message);
+    return { success: true, data: response?.data?.data };
+  } catch (err) {
+    toast.error(err?.response?.data?.message || "Something went wrong");
+    return { success: false };
+  }
+};
+
+export const remove_user_favourite = async (payload) => {
+  try {
+    const response = await axios.post(`${API}/removeFav`, payload);
     return { success: true, data: response?.data?.data };
   } catch (err) {
     toast.error(err?.response?.data?.message || "Something went wrong");
