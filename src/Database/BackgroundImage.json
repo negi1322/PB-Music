@@ -1,0 +1,33 @@
+[
+    {
+      "type": "all",
+      "image": "https://lh3.googleusercontent.com/ExTj5pWOtiyDHWri3HS6fhD8VaGH9V8NPDz_0gW16eqV19SNlA87oQphl61UTaiuE37y0bDAOvx_KqGm=w1500-h844-l90-rj"
+    },
+    {
+      "type": "podcasts",
+      "image": "https://lh3.googleusercontent.com/m4-O8UOBaMsAO8F5ocyJuLFoBURBSwCtmp5-xVhaHwBPLig9459iKeVn0mjTP4qdXhWkT6Mn-HKL-I0=w1500-h844-l90-rj"
+    },
+    {
+        "type": "romance",
+        "image": "https://lh3.googleusercontent.com/exQ-QOIHPEJ68k8CKBEg93M6IE1fBZfjpItZ2YFSakfeSey7wKj-7_UyURlRKI06oIXGedq86Qj7e0s=w1500-h844-l90-rj"
+      },
+      {
+        "type": "relax",
+        "image": "https://lh3.googleusercontent.com/cKnUvB5jRHCPCmEkmyuqzMyU0DIoshzxfVrM-sBpGZDZ4XRMkOYHDK4qKSZq5dyGussWusX2qYPeFys=w1500-h844-l90-rj"
+      }   ,
+      {
+        "type": "party",
+        "image": "https://lh3.googleusercontent.com/6jtxw8SZsqXTpPvND8XxKgpYfrpoiKnbp9Iw1viV-lAxzjIuLwle3Xh8AhMZEYWtnrpzt4krc5MaRoI=w1500-h844-l90-rj"
+      },
+      {
+        "type": "workout",
+        "image": "https://lh3.googleusercontent.com/Jzxl9jOSG9o3EYmr1WhGEtWsJ7i2v-opFvFKhtm7LnUJodxfwiZr8ffDKTPnVV7s32Fg1wBAN8CHFw=w1500-h844-l90-rj"
+      } ,  {
+        "type": "focus",
+        "image": "https://lh3.googleusercontent.com/py1Oon7wuodv1eYOf0u47mKdHq16uY0PKUd09b04lRP-ReqixViz7BVJF4LXXGBkSrpYPX1c3cc_zKY=w1500-h844-l90-rj"
+      },
+      {
+        "type": "sleep",
+        "image": "https://lh3.googleusercontent.com/p5OhgsZHpdguonRsa7UU2Oxu0frKDYl30YosWitJ9SC36-jcGCbyPPgHOKfkiAgDWRGIFxYiYthOWNw=w1500-h844-l90-rj"
+      }              
+  ]
