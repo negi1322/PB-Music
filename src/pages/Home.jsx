@@ -129,7 +129,7 @@ function Home() {
           ease: [0.25, 0.46, 0.45, 0.94],
         }}
       >
-        <div className="container-xxl px-1 px-md-0">
+        <div className="container-xxl">
           <Nav
             profiletoogle={() => setshowProfile((prev) => !prev)}
             onSearchKeyDown={(e) => {
@@ -175,7 +175,7 @@ function Home() {
             </AnimatePresence>
           </div>
 
-          <div className="song-container-listed">
+          <div className="song-container-listed container-xxl">
             {showLoader ? (
               <div
                 className="d-flex justify-content-center align-items-center"
@@ -189,17 +189,19 @@ function Home() {
                   <div
                     key={key}
                     onClick={() => playSong(song)}
-                    className="col-12 d-flex justify-content-between align-items-center pointer play-song"
+                    className="col-12 d-flex justify-content-between  pointer play-song"
                   >
-                    <div className="d-flex gap-4">
-                      <img
-                        src={song?.thumbnails?.[0]?.url}
-                        alt="thumbnail"
-                        onError={(e) => {
-                          e.target.src =
-                            "/pngtree-electronic-music-album-image_528773.jpg";
-                        }}
-                      />
+                    <div className="d-flex gap-md-4 gap-3">
+                      <div className="home-song-list-album">
+                        <img
+                          src={song?.thumbnails?.[0]?.url}
+                          alt="thumbnail"
+                          onError={(e) => {
+                            e.target.src =
+                              "/pngtree-electronic-music-album-image_528773.jpg";
+                          }}
+                        />
+                      </div>
 
                       <div>
                         <p className="text-white mb-0">{song.name}</p>

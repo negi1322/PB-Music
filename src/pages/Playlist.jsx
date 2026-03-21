@@ -5,7 +5,7 @@ import Music from "../components/Common/Music";
 import ImageLoader from "../components/Common/ImageLoader";
 import { AnimatePresence, motion } from "framer-motion";
 import SmallMusic from "../components/Common/SmallMusic";
-
+const API = import.meta.env.VITE_APP_URL;
 const Playlist = () => {
   const [playlist, setPlaylist] = useState();
   const [playlistparty, setPlaylistparty] = useState();
@@ -77,7 +77,7 @@ const Playlist = () => {
                 closeSong={() => setShowSmallMusic(true)}
                 singerName={playingPlaylist?.[0]?.artist?.name}
                 songs={playingPlaylist}
-                songAudio={`http://localhost:3000/audio?id=${playingPlaylist?.[0]?.videoId}`}
+                songAudio={`${API}/audio?id=${playingPlaylist?.[0]?.videoId}`}
                 songName={playingPlaylist?.[0]?.name}
                 songAlbum={playingPlaylist?.[0]?.thumbnails?.[0]?.url}
               />

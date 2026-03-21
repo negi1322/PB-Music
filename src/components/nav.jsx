@@ -5,8 +5,8 @@ const Nav = ({ onSearchKeyDown, playlist, profiletoogle }) => {
   const navigate = useNavigate();
   return (
     <>
-      <nav className=" py-3">
-        <div className="d-flex  justify-content-between gap-md-0 gap-3 flex-wrap align-items-center">
+      <nav className=" py-md-3 pt-3 pb-1 ">
+        <div className="d-flex  justify-content-between gap-md-0 gap-2 flex-wrap align-items-center">
           <span onClick={() => navigate("/")} className="nav-logo pointer ">
             <img src={LOGO} alt="logo-img" className="img-fluid" />
           </span>

@@ -117,7 +117,7 @@ function Search() {
           </div>
 
           <div
-            className="song-container-listed"
+            className="song-container-listed container-xxl"
             style={{ height: "calc(100vh - 125px)" }}
           >
             {showLoader ? (
