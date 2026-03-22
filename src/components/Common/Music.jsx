@@ -108,7 +108,7 @@ const Music = ({
           onClick={() => playSongNow(song)}
           whileHover={{
             scale: 1.03,
-            cursor :"pointer",
+            cursor: "pointer",
             padding: "0px 20px",
             outline: "1.5px solid rgba(255,255,255,0.6)",
             borderRadius: "12px",
