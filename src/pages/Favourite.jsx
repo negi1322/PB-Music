@@ -104,7 +104,10 @@ const Favourite = () => {
 
         <div className="container-xxl">
           <Nav />
-          <div className="song-container-listed container-xxl">
+          <div
+            className="song-container-listed container-xxl pb-5"
+            style={{ height: "calc(100vh - 102px" }}
+          >
             {showLoader ? (
               <div
                 className="d-flex justify-content-center align-items-center"

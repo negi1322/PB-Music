@@ -14,6 +14,7 @@ import {
   related_song_album,
   remove_user_favourite,
 } from "../api/UserAction";
+import SmallLoader from "../components/Common/SmallLoader";
 
 const API = import.meta.env.VITE_APP_URL;
 
@@ -27,6 +28,7 @@ function Search() {
   const [showSmallMusic, setShowSmallMusic] = useState(false);
   const [favourite, setFavourite] = useState([]);
   const [relatedSongs, setRelatedSongs] = useState();
+  const [liking, setLiking] = useState("AsLPGPs5iQk");
   const location = useLocation();
   const userData = JSON.parse(localStorage.getItem("user"));
 
@@ -90,6 +92,7 @@ function Search() {
     });
   };
   const handleFavorites = async (song) => {
+    setLiking(song?.videoId);
     if (favourite?.includes(song?.videoId)) {
       await remove_user_favourite({
         email: userData?.email,
@@ -103,6 +106,7 @@ function Search() {
     }
     const updatedFav = await get_user_favourite();
     setFavourite(updatedFav?.data?.videoIds);
+    setLiking(null);
   };
 
   const getRelatedSongs = async (id) => {
@@ -208,17 +212,24 @@ function Search() {
                       <div className="text-secondary fs-6 fw-medium">
                         {formatTime(song?.duration)}
                       </div>
+
                       <span
                         onClick={() => handleFavorites(song)}
                         className="pointer"
                       >
-                        <i
-                          className={
-                            favourite?.includes(song?.videoId)
-                              ? "bi bi-heart-fill text-danger fs-5 fw-medium"
-                              : "bi bi-heart text-white fs-5 fw-medium"
-                          }
-                        ></i>
+                        {liking === song?.videoId ? (
+                          <span>
+                            <SmallLoader />
+                          </span>
+                        ) : (
+                          <i
+                            className={
+                              favourite?.includes(song?.videoId)
+                                ? "bi bi-heart-fill text-danger fs-5 fw-medium"
+                                : "bi bi-heart text-white fs-5 fw-medium"
+                            }
+                          ></i>
+                        )}
                       </span>
                     </div>
                   </div>
