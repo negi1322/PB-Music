@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   add_user_favourite,
   get_song_album,
@@ -9,13 +9,16 @@ import Nav from "../components/nav";
 import { NOFAV } from "../../public/Images";
 import Loader from "../components/Common/Loader";
 import { formatTime } from "../components/Common/Input";
+import Music from "../components/Common/Music";
+const API = import.meta.env.VITE_APP_URL;
 
 const userData = JSON.parse(localStorage.getItem("user"));
 const Favourite = () => {
   const [favourite, setFavourite] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [showLoader, setshowLoader] = useState(true);
-
+  const [playMusic, setPlayMusic] = useState(false);
+  const [audio, setAudio] = useState();
   useEffect(() => {
     getFavourite();
   }, []);
@@ -63,28 +66,58 @@ const Favourite = () => {
     const updatedFav = await get_user_favourite();
     setFavourite(updatedFav?.data?.videoIds);
   };
-  console.log("album is", albums);
+
+  const playSong = (song) => {
+    console.log("++++", song);
+    setAudio({
+      videoId: song?.data?.videoId,
+      title: song?.data?.name,
+      thumbnail: song?.data?.thumbnails?.[1]?.url,
+      artist: song?.data?.artist?.name,
+    });
+    setPlayMusic(true);
+  };
 
   return (
     <>
-      <section className="full-container bg-black ">
+      <section
+        className="full-container "
+        style={{ backgroundColor: "#0E0E0E" }}
+      >
+        <div className={playMusic ? "d-block" : "d-none"}>
+          {playMusic ? (
+            <Music
+              songvideoId={audio?.videoId}
+              closeSong={() => {
+                setPlayMusic(false);
+              }}
+              singerName={audio?.artist}
+              songAlbum={audio?.thumbnail}
+              songName={audio?.title}
+              songAudio={`${API}/audio?id=${audio?.videoId}`}
+              songs={albums?.map((i) => i?.data)}
+            />
+          ) : (
+            ""
+          )}
+        </div>
+
         <div className="container-xxl">
           <Nav />
-
           <div className="song-container-listed container-xxl">
             {showLoader ? (
               <div
                 className="d-flex justify-content-center align-items-center"
                 style={{ height: "70vh" }}
               >
-                <Loader />
+                <Loader barcolor={"bg-white"} />
               </div>
             ) : (
               <div className="row gap-3 flex-column">
-                {albums.map((song, key) => (
+                {albums?.map((song, key) => (
                   <div
                     key={key}
-                    className="col-12 d-flex justify-content-between   play-song"
+                    className="col-12 d-flex justify-content-between play-song"
                   >
                     <div
                       onClick={() => playSong(song)}
@@ -104,13 +137,13 @@ const Favourite = () => {
                       <div>
                         <p className="text-white mb-0">{song?.data?.name}</p>
                         <p className="text-secondary mb-0 fs-6">
-                          {song?.artist?.name}
+                          {song?.data?.artist?.name}
                         </p>
                       </div>
                     </div>
                     <div className="d-flex align-content-center gap-4">
                       <div className="text-secondary fs-6 fw-medium">
-                        {formatTime(song?.duration)}
+                        {formatTime(song?.data?.duration)}
                       </div>
                       <span
                         onClick={() => handleFavorites(song)}
@@ -118,7 +151,7 @@ const Favourite = () => {
                       >
                         <i
                           className={
-                            favourite?.includes(song?.videoId)
+                            favourite?.includes(song?.data?.videoId)
                               ? "bi bi-heart-fill text-danger fs-5 fw-medium"
                               : "bi bi-heart text-white fs-5 fw-medium"
                           }
@@ -130,22 +163,6 @@ const Favourite = () => {
               </div>
             )}
           </div>
-          {/* <div className="no-fav-conatiner">
-            {albums?.length > 0 ? (
-              albums.map((item, index) => (
-                
-              ))
-            ) : (
-              <>
-                <div className="d-flex justify-content-center align-content-center">
-                  <img src={NOFAV} alt="nofav" className="img-fluid " />
-                </div>
-                <h4 className="text-center text-white fs-1 fw-bold mb-0 ">
-                  ADD YOUR FIRST FAV ❤️ SONG
-                </h4>
-              </>
-            )}
-          </div> */}
         </div>
       </section>
     </>

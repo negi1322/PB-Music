@@ -23,7 +23,6 @@ const Music = ({
   const [duration, setDuration] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
   const validSongs = songs?.filter((s) => s.videoId);
-  console.dir("songss+++++", songs);
   useEffect(() => {
     if (!audioRef.current) return;
     const percent = (currentTime / duration) * 100;

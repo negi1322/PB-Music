@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-const Loader = () => {
+const Loader = ({ barcolor }) => {
   return (
     <StyledWrapper>
       <div className="loader">
-        <span className="bar" />
-        <span className="bar" />
-        <span className="bar" />
+        <span className={`bar ${barcolor}`} />
+        <span className={`bar ${barcolor}`} />
+        <span className={`bar ${barcolor}`} />
       </div>
     </StyledWrapper>
   );
