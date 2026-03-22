@@ -1,8 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { LOGO } from "../../public/Images";
+import { search_suggestions } from "../api/UserAction";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const Nav = ({ onSearchKeyDown, playlist, profiletoogle }) => {
   const navigate = useNavigate();
+  const [seachResult, setSeachResult] = useState([]);
+
+  const getSuggestions = (query) => {
+    search_suggestions(query, (res) => {
+      if (res.success) {
+        setSeachResult(res.data);
+      }
+    });
+  };
   return (
     <>
       <nav className=" py-md-3 pt-3 pb-1 ">
@@ -43,11 +55,12 @@ const Nav = ({ onSearchKeyDown, playlist, profiletoogle }) => {
               />
             </span>
           </div>
-          <div className="search-container">
+          <div className="search-container position-relative">
             <span className="search-icon">
               <i className="bi bi-search"></i>
             </span>
             <input
+              onChange={(e) => getSuggestions(e?.target?.value)}
               type="text"
               placeholder="Search artists, songs..."
               className="search-input"
@@ -61,6 +74,36 @@ const Nav = ({ onSearchKeyDown, playlist, profiletoogle }) => {
             <span className="search-clear">
               <i className="bi bi-x-lg"></i>
             </span>
+
+            <div className=" search-result-container ">
+              <div className="d-flex flex-column justify-content-center">
+                {seachResult?.map((i, key) => (
+                  <motion.div
+                    key={key}
+                    className="d-flex gap-3 align-items-center px-4 py-3 pointer"
+                    initial={{ height: 0, opacity: 0, overflow: "hidden" }}
+                    animate={{ height: "auto", opacity: 1, overflow: "hidden" }}
+                    exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  >
+                    <span className="search-icon">
+                      <i className="bi bi-search"></i>
+                    </span>
+                    <motion.span
+                      whileHover={{ scale: 1.1 }}
+                      onClick={() =>
+                        navigate("/search", {
+                          state: { query: i },
+                        })
+                      }
+                      className=" fs-6 fw-medium text-white text-wrap "
+                    >
+                      {i}
+                    </motion.span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </div>
           <div className="d-md-block d-none">
             <div className=" d-flex gap-4 align-items-center">

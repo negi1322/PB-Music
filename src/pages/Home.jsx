@@ -7,6 +7,7 @@ import {
   add_user_favourite,
   get_trending,
   get_user_favourite,
+  related_song_album,
   remove_user_favourite,
 } from "../api/UserAction";
 import Profile from "../components/Common/ProfileCard";
@@ -28,7 +29,9 @@ function Home() {
   const [showMusic, setShowMusic] = useState(false);
   const [showSmallMusic, setShowSmallMusic] = useState(false);
   const [favourite, setFavourite] = useState([]);
-
+  const [relatedSongs, setRelatedSongs] = useState();
+  // console.log("related songsss +++++", relatedSongs);
+  // console.log("songss+++++", songs);
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("user"));
   const categories = [
@@ -46,6 +49,12 @@ function Home() {
     (i) => activeType?.toLocaleLowerCase() === i?.type,
   );
 
+  const getRelatedSongs = async (id) => {
+    const data = await related_song_album(id);
+    setRelatedSongs(data?.data?.data?.relatedSongs);
+  };
+
+  console.log("?in home related", relatedSongs);
   useEffect(() => {
     getTranding();
   }, [activeType]);
@@ -100,7 +109,6 @@ function Home() {
 
   const playSong = (song) => {
     if (!song?.videoId) return;
-
     setAudio({
       videoId: song.videoId,
       title: song.name,
@@ -195,7 +203,7 @@ function Home() {
                     setShowMusic(false);
                     setShowSmallMusic(true);
                   }}
-                  songs={songs}
+                  songs={relatedSongs}
                   singerName={audio.artist}
                   songAlbum={audio.thumbnail}
                   songName={audio.title}
@@ -217,6 +225,7 @@ function Home() {
               <div className="row gap-3 flex-column">
                 {songs.map((song, key) => (
                   <div
+                    onClick={() => getRelatedSongs(song?.videoId)}
                     key={key}
                     className="col-12 d-flex justify-content-between   play-song"
                   >

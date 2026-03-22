@@ -11,6 +11,7 @@ import SmallMusic from "../components/Common/SmallMusic";
 import {
   add_user_favourite,
   get_user_favourite,
+  related_song_album,
   remove_user_favourite,
 } from "../api/UserAction";
 
@@ -25,7 +26,7 @@ function Search() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSmallMusic, setShowSmallMusic] = useState(false);
   const [favourite, setFavourite] = useState([]);
-
+  const [relatedSongs, setRelatedSongs] = useState();
   const location = useLocation();
   const userData = JSON.parse(localStorage.getItem("user"));
 
@@ -103,6 +104,11 @@ function Search() {
     const updatedFav = await get_user_favourite();
     setFavourite(updatedFav?.data?.videoIds);
   };
+
+  const getRelatedSongs = async (id) => {
+    const data = await related_song_album(id);
+    setRelatedSongs(data?.data?.data?.relatedSongs);
+  };
   return (
     <>
       <AnimatePresence>
@@ -144,7 +150,7 @@ function Search() {
                 <Music
                   songvideoId={audio?.videoID}
                   closeSong={() => setShowSmallMusic(true)}
-                  songs={songs}
+                  songs={relatedSongs}
                   singerName={audio?.artist}
                   songAlbum={audio?.thumbnail}
                   songName={audio?.title}
@@ -169,6 +175,7 @@ function Search() {
               <div className="row gap-3 flex-column">
                 {songs?.map((song, key) => (
                   <div
+                    onClick={() => getRelatedSongs(song?.videoId)}
                     key={key}
                     className="col-12 d-flex flex-row justify-content-between align-items-center  play-song"
                   >

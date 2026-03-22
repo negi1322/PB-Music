@@ -18,13 +18,12 @@ const Music = ({
   backgroundImage,
 }) => {
   const { audioRef, togglePlay, isPlaying, setIsPlaying } = useMusic();
-
   const [playSong, setPlaySong] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
-  const validSongs = songs?.filter((s) => s.videoId?.length === 11);
-
+  const validSongs = songs?.filter((s) => s.videoId);
+  console.dir("songss+++++", songs);
   useEffect(() => {
     if (!audioRef.current) return;
     const percent = (currentTime / duration) * 100;
@@ -35,6 +34,7 @@ const Music = ({
     setDuration(audioRef.current.duration || 0);
   };
 
+  console.log("inside onclick song", playSong);
   const playSongNow = (song) => {
     if (!song?.videoId) return;
     const url = `${API}/audio?id=${song.videoId}`;
@@ -129,7 +129,9 @@ const Music = ({
                   <span className="text-center">
                     <p className="text-secondary mb-0">Now Playing</p>
                     <p className="text-white mb-0">
-                      {playSong ? playSong?.name : songName}
+                      {playSong
+                        ? (playSong?.name ?? playSong?.title)
+                        : songName}
                     </p>
                   </span>
                   <span>
@@ -139,7 +141,12 @@ const Music = ({
 
                 <div className="col-md-8 my-3 mx-auto col-12">
                   <img
-                    src={playSong ? playSong?.thumbnails?.[0]?.url : songAlbum}
+                    src={
+                      playSong
+                        ? (playSong?.thumbnails?.[0]?.url ??
+                          playSong?.thumbnail)
+                        : songAlbum
+                    }
                     onError={(e) => {
                       e.target.src =
                         "/public/pngtree-electronic-music-album-image_528773.jpg";
@@ -159,10 +166,12 @@ const Music = ({
 
                 <div className="col-11 mx-auto">
                   <p className="text-white fs-4 mb-0">
-                    {playSong ? playSong?.name : songName}
+                    {playSong ? (playSong?.name ?? playSong?.title) : songName}
                   </p>
                   <p className="text-secondary">
-                    {playSong ? playSong?.artist?.name : singerName}
+                    {playSong
+                      ? (playSong?.artist?.name ?? playSong?.artists)
+                      : singerName}
                   </p>
                 </div>
 
@@ -227,7 +236,7 @@ const Music = ({
                       <div className="row justify-content-between">
                         <div className="col-3 col-md-2">
                           <img
-                            src={song?.thumbnails?.[0]?.url}
+                            src={song?.thumbnails?.[0]?.url ?? song?.thumbnail}
                             onError={(e) => {
                               e.target.src =
                                 "/public/pngtree-electronic-music-album-image_528773.jpg";
@@ -239,10 +248,10 @@ const Music = ({
                         </div>
                         <div className="col-7 col-md-7">
                           <p className="text-white mb-0 text-ellipsis">
-                            {song.name}
+                            {song.name ?? song?.title}
                           </p>
                           <p className="text-secondary text-ellipsis">
-                            {song?.artist?.name}
+                            {song?.artist?.name ?? song?.artists}
                           </p>
                         </div>
                         <div className="col-2 col-md-3">

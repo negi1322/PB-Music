@@ -16,6 +16,9 @@
   cursor: pointer;
 }
 
+.w-fit {
+  width: fit-content;
+}
 .background-image-set {
   background-position: bottom;
   background-repeat: no-repeat;
@@ -228,6 +231,18 @@ span.nav-logo {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+.search-result-container {
+  position: absolute;
+  width: stretch;
+  outline: none;
+  border: none;
+  background-color: #1e293b;
+  top: 102%;
+  left: 0%;
+  right: 0%;
+  z-index: 111;
+  border-radius: 4%;
 }
 /* Music section styling start */
 .music-bg {

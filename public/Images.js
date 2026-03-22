@@ -4,4 +4,5 @@ import OVERSIGNIMG from "./Container.png";
 import LOGO from "./logo.png";
 import MUSICBG from "./Full Screen Player Container paints.png";
 import SONGALBUM from "./pngtree-electronic-music-album-image_528773.jpg";
-export { SINGUPIMG, OVERSIGNIMG, SINGUPBG, LOGO, MUSICBG, SONGALBUM };
+import NOFAV from "./Sandy_Tech-30_Single-08-removebg-preview.png";
+export { SINGUPIMG, OVERSIGNIMG, SINGUPBG, LOGO, MUSICBG, SONGALBUM, NOFAV };

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { debounce } from "../components/Common/functions";
 const API = import.meta.env.VITE_APP_URL;
 const userData = JSON.parse(localStorage.getItem("user"));
 
@@ -114,12 +115,35 @@ export const get_user_favourite = async () => {
 };
 
 export const get_song_album = async (videoIds) => {
-  console.log(videoIds);
   try {
     const response = await axios.post(`${API}/get_song`, { videoIds });
-    return { success: true, data: response?.data?.data };
+    console.log("data response ----", response);
+    return { success: true, data: response?.data?.songs };
   } catch (err) {
     toast.error(err?.response?.data?.message || "Something went wrong");
     return { success: false };
   }
 };
+
+export const related_song_album = async (videoId) => {
+  try {
+    const response = await axios.post(`${API}/related_song`, { videoId });
+
+    return { success: true, data: response };
+  } catch (err) {
+    toast.error(err?.response?.data?.message || "Something went wrong");
+    return { success: false };
+  }
+};
+
+export const search_suggestions = debounce(async (query, callback) => {
+  try {
+    const response = await axios.get(`${API}/search_song`, {
+      params: { query },
+    });
+    callback({ success: true, data: response?.data?.suggestions }); // ← return ki jagah callback
+  } catch (err) {
+    toast.error(err?.response?.data?.message || "Something went wrong");
+    callback({ success: false });
+  }
+}, 300);
