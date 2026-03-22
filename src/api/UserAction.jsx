@@ -141,9 +141,9 @@ export const search_suggestions = debounce(async (query, callback) => {
     const response = await axios.get(`${API}/search_song`, {
       params: { query },
     });
-    callback({ success: true, data: response?.data?.suggestions }); // ← return ki jagah callback
+    callback({ success: true, data: response?.data?.suggestions }); 
   } catch (err) {
-    toast.error(err?.response?.data?.message || "Something went wrong");
+    // toast.error(err?.response?.data?.message || "Something went wrong");
     callback({ success: false });
   }
 }, 300);

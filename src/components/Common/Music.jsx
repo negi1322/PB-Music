@@ -1,10 +1,10 @@
 import { FiShuffle, FiSkipBack, FiSkipForward, FiRepeat } from "react-icons/fi";
 import { FaPause } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { formatTime } from "./Input";
 import { motion } from "framer-motion";
 import { useMusic } from "../../utils/ContextData";
-
+import { FixedSizeList as List } from "react-window";
 const API = import.meta.env.VITE_APP_URL;
 
 const Music = ({
@@ -22,7 +22,9 @@ const Music = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
+
   const validSongs = songs?.filter((s) => s.videoId);
+
   useEffect(() => {
     if (!audioRef.current) return;
     const percent = (currentTime / duration) * 100;
@@ -33,8 +35,7 @@ const Music = ({
     setDuration(audioRef.current.duration || 0);
   };
 
-  console.log("inside onclick song", playSong);
-  const playSongNow = (song) => {
+  const playSongNow = useCallback((song) => {
     if (!song?.videoId) return;
     const url = `${API}/audio?id=${song.videoId}`;
     audioRef.current.src = url;
@@ -43,7 +44,7 @@ const Music = ({
     setPlaySong(song);
     setIsPlaying(true);
     setCurrentTime(0);
-  };
+  }, []);
 
   const handleNext = () => {
     const currentId = playSong?.videoId || songvideoId;
@@ -96,6 +97,56 @@ const Music = ({
     }
   }, [songAudio]);
 
+  const SongRow = useCallback(({ index, style, data }) => {
+    const { songs, playSongNow } = data;
+    const song = songs[index];
+
+    return (
+      <div style={style}>
+        <motion.div
+          className="mt-3"
+          onClick={() => playSongNow(song)}
+          whileHover={{
+            scale: 1.03,
+            cursor :"pointer",
+            padding: "0px 20px",
+            outline: "1.5px solid rgba(255,255,255,0.6)",
+            borderRadius: "12px",
+            backgroundColor: "rgba(65,63,63,0.05)",
+          }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          <div className="row justify-content-between">
+            <div className="col-3 col-md-2">
+              <img
+                src={song?.thumbnails?.[0]?.url ?? song?.thumbnail}
+                onError={(e) => {
+                  e.target.src =
+                    "/public/pngtree-electronic-music-album-image_528773.jpg";
+                  e.target.onerror = null;
+                }}
+                className="sidebar-image-song-cover"
+                alt=""
+              />
+            </div>
+            <div className="col-7 col-md-7">
+              <p className="text-white mb-0 text-ellipsis">
+                {song.name ?? song?.title}
+              </p>
+              <p className="text-secondary text-ellipsis">
+                {song?.artist?.name ?? song?.artists}
+              </p>
+            </div>
+            <div className="col-2 col-md-3">
+              <i className="bi bi-play-fill text-white fs-1"></i>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }, []);
+
   return (
     <>
       <motion.section
@@ -114,27 +165,28 @@ const Music = ({
           opacity: { duration: 0.4 },
         }}
         style={{
-          backgroundImage: `url(${backgroundImage ?? "https://lh3.googleusercontent.com/ExTj5pWOtiyDHWri3HS6fhD8VaGH9V8NPDz_0gW16eqV19SNlA87oQphl61UTaiuE37y0bDAOvx_KqGm=w1500-h844-l90-rj"})`,
+          backgroundImage: `url(${
+            backgroundImage ??
+            "https://lh3.googleusercontent.com/ExTj5pWOtiyDHWri3HS6fhD8VaGH9V8NPDz_0gW16eqV19SNlA87oQphl61UTaiuE37y0bDAOvx_KqGm=w1500-h844-l90-rj"
+          })`,
         }}
       >
         <div className="music-container">
           <div className="container-xxl">
             <div className="row">
+              {/* Left Panel */}
               <div className="col-md-6 col-12 p-3 p-md-5 overflow-hidden">
                 <div className="col-12 d-flex justify-content-between align-items-center">
                   <span onClick={closeSong}>
                     <i className="pointer bi bi-chevron-down text-white fs-4"></i>
                   </span>
-                  <span className="text-center">
+                  <span className="text-center w-100">
                     <p className="text-secondary mb-0">Now Playing</p>
-                    <p className="text-white mb-0">
+                    <p className="text-white mb-0 text-ellipsis">
                       {playSong
                         ? (playSong?.name ?? playSong?.title)
                         : songName}
                     </p>
-                  </span>
-                  <span>
-                    <i className="bi bi-three-dots text-white fs-4"></i>
                   </span>
                 </div>
 
@@ -164,7 +216,7 @@ const Music = ({
                 </div>
 
                 <div className="col-11 mx-auto">
-                  <p className="text-white fs-4 mb-0">
+                  <p className="text-white fs-4 mb-0 text-ellipsis">
                     {playSong ? (playSong?.name ?? playSong?.title) : songName}
                   </p>
                   <p className="text-secondary">
@@ -213,52 +265,15 @@ const Music = ({
 
               <div className="col-md-6">
                 <div className="sidebar-music-list">
-                  {validSongs?.map((song, i) => (
-                    <motion.div
-                      key={i}
-                      className="mt-3"
-                      onClick={() => playSongNow(song)}
-                      whileHover={{
-                        scale: 1.03,
-                        padding: "10px 20px",
-                        outline: "1.5px solid rgba(255,255,255,0.6)",
-                        borderRadius: "12px",
-                        backgroundColor: "rgba(65,63,63,0.05)",
-                      }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 20,
-                      }}
-                    >
-                      <div className="row justify-content-between">
-                        <div className="col-3 col-md-2">
-                          <img
-                            src={song?.thumbnails?.[0]?.url ?? song?.thumbnail}
-                            onError={(e) => {
-                              e.target.src =
-                                "/public/pngtree-electronic-music-album-image_528773.jpg";
-                              e.target.onerror = null;
-                            }}
-                            className="sidebar-image-song-cover"
-                            alt=""
-                          />
-                        </div>
-                        <div className="col-7 col-md-7">
-                          <p className="text-white mb-0 text-ellipsis">
-                            {song.name ?? song?.title}
-                          </p>
-                          <p className="text-secondary text-ellipsis">
-                            {song?.artist?.name ?? song?.artists}
-                          </p>
-                        </div>
-                        <div className="col-2 col-md-3">
-                          <i className="bi bi-play-fill text-white fs-1"></i>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
+                  <List
+                    height={window.innerHeight * 100}
+                    itemCount={validSongs?.length || 0}
+                    itemSize={90}
+                    width="100%"
+                    itemData={{ songs: validSongs, playSongNow }}
+                  >
+                    {SongRow}
+                  </List>
                 </div>
               </div>
             </div>

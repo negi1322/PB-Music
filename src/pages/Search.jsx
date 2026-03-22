@@ -188,7 +188,7 @@ function Search() {
                         playSong(song);
                         setShowSmallMusic(false);
                       }}
-                      className="pointer d-flex flex-row gap-4"
+                      className="pointer d-flex flex-row gap-md-4 gap-2"
                     >
                       <div>
                         <img
@@ -208,7 +208,7 @@ function Search() {
                         </p>
                       </div>
                     </div>
-                    <div className="d-flex align-content-center gap-4">
+                    <div className="d-flex align-items-center gap-md-4 gap-2">
                       <div className="text-secondary fs-6 fw-medium">
                         {formatTime(song?.duration)}
                       </div>
