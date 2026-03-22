@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import { ProtectedRoute } from "./utils/auth";
+import { AuthRoute, ProtectedRoute } from "./utils/auth";
 import Search from "./pages/Search";
 import { MusicProvider } from "./utils/ContextData";
 import Favourite from "./pages/Favourite";
@@ -33,8 +33,22 @@ function App() {
               }
             />
 
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/signup"
+              element={
+                <AuthRoute>
+                  <Signup />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <AuthRoute>
+                  <Login />
+                </AuthRoute>
+              }
+            />
 
             <Route
               path="/playlist"
