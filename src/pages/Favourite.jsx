@@ -16,7 +16,7 @@ const userData = JSON.parse(localStorage.getItem("user"));
 const Favourite = () => {
   const [favourite, setFavourite] = useState([]);
   const [albums, setAlbums] = useState([]);
-  const [showLoader, setshowLoader] = useState(true);
+  const [showLoader, setshowLoader] = useState(false);
   const [playMusic, setPlayMusic] = useState(false);
   const [audio, setAudio] = useState();
   useEffect(() => {
@@ -68,7 +68,6 @@ const Favourite = () => {
   };
 
   const playSong = (song) => {
-    console.log("++++", song);
     setAudio({
       videoId: song?.data?.videoId,
       title: song?.data?.name,
@@ -117,52 +116,71 @@ const Favourite = () => {
               </div>
             ) : (
               <div className="row gap-3 flex-column">
-                {albums?.map((song, key) => (
-                  <div
-                    key={key}
-                    className="col-12 d-flex justify-content-between play-song"
-                  >
-                    <div
-                      onClick={() => playSong(song)}
-                      className="d-flex gap-md-4 gap-3 pointer"
-                    >
-                      <div className="home-song-list-album">
-                        <img
-                          src={song?.data?.thumbnails?.[0]?.url}
-                          alt="thumbnail"
-                          onError={(e) => {
-                            e.target.src =
-                              "/pngtree-electronic-music-album-image_528773.jpg";
-                          }}
-                        />
-                      </div>
-
-                      <div>
-                        <p className="text-white mb-0">{song?.data?.name}</p>
-                        <p className="text-secondary mb-0 fs-6">
-                          {song?.data?.artist?.name}
-                        </p>
-                      </div>
+                {albums?.length == 0 ? (
+                  <>
+                    <div className="d-flex justify-content-center ">
+                      <img
+                        src="/public/Sandy_Tech-30_Single-08-removebg-preview.png"
+                        alt=""
+                        className="img-fluid"
+                      />
                     </div>
-                    <div className="d-flex align-content-center gap-4">
-                      <div className="text-secondary fs-6 fw-medium">
-                        {formatTime(song?.data?.duration)}
-                      </div>
-                      <span
-                        onClick={() => handleFavorites(song)}
-                        className="pointer"
+                    <p className="text-center text-white fs-3 text-wrap lh-0 text-capitalize">
+                      Pick your favorite song, {userData?.username} 🎶
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    {albums?.map((song, key) => (
+                      <div
+                        key={key}
+                        className="col-12 d-flex justify-content-between play-song"
                       >
-                        <i
-                          className={
-                            favourite?.includes(song?.data?.videoId)
-                              ? "bi bi-heart-fill text-danger fs-5 fw-medium"
-                              : "bi bi-heart text-white fs-5 fw-medium"
-                          }
-                        ></i>
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                        <div
+                          onClick={() => playSong(song)}
+                          className="d-flex gap-md-4 gap-3 pointer"
+                        >
+                          <div className="home-song-list-album">
+                            <img
+                              src={song?.data?.thumbnails?.[0]?.url}
+                              alt="thumbnail"
+                              onError={(e) => {
+                                e.target.src =
+                                  "/pngtree-electronic-music-album-image_528773.jpg";
+                              }}
+                            />
+                          </div>
+
+                          <div>
+                            <p className="text-white mb-0">
+                              {song?.data?.name}
+                            </p>
+                            <p className="text-secondary mb-0 fs-6">
+                              {song?.data?.artist?.name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="d-flex align-content-center gap-4">
+                          <div className="text-secondary fs-6 fw-medium">
+                            {formatTime(song?.data?.duration)}
+                          </div>
+                          <span
+                            onClick={() => handleFavorites(song)}
+                            className="pointer position-relative"
+                          >
+                            <i
+                              className={
+                                favourite?.includes(song?.data?.videoId)
+                                  ? "bi bi-heart-fill text-danger fs-5 fw-medium"
+                                  : "bi bi-heart text-white fs-5 fw-medium"
+                              }
+                            ></i>
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
             )}
           </div>
