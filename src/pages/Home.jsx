@@ -251,7 +251,7 @@ function Home() {
                         </p>
                       </div>
                     </div>
-                    <div className="gap-md-4 gap-2">
+                    <div className="d-flex align-items-center gap-md-4 gap-2">
                       <div className="text-secondary fs-6 fw-medium">
                         {formatTime(song?.duration)}
                       </div>
@@ -274,7 +274,7 @@ function Home() {
             )}
           </div>
         </div>
-        {showSmallMusic ? <SmallMusic /> : ""}
+        {/* {showSmallMusic ? <SmallMusic /> : ""} */}
       </motion.div>
     </>
   );

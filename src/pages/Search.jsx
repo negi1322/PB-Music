@@ -238,7 +238,7 @@ function Search() {
             )}
           </div>
         </div>
-        {showSmallMusic ? <SmallMusic /> : ""}
+        {/* {showSmallMusic ? <SmallMusic /> : ""} */}
       </div>
     </>
   );
